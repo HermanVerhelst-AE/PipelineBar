@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!-- Laat bouwen toe vanaf macOS of Linux. -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Nullable>enable</Nullable>
+    <!-- WPF en WinForms delen typenamen (Application, Color…); we importeren expliciet. -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>PipelineBar</RootNamespace>
+    <AssemblyName>PipelineBar</AssemblyName>
+    <ApplicationIcon>PipelineBar.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Product>PipelineBar</Product>
+    <Company>AE</Company>
+    <Version>1.0.0</Version>
+    <NeutralLanguage>nl</NeutralLanguage>
+    <!-- WPF0001: ThemeMode (Fluent-stijl) is nog experimenteel.
+         WFO0003: WinForms-advies; in een WPF-app komt de DPI-modus uit het manifest. -->
+    <NoWarn>$(NoWarn);WPF0001;WFO0003</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="PipelineBar.ico" />
+  </ItemGroup>
+
+</Project>

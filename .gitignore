@@ -1,0 +1,11 @@
+# Bouwresultaten
+build/
+Windows/bin/
+Windows/obj/
+*.zip
+
+# Systeem en editors
+.DS_Store
+.vs/
+.vscode/
+*.user

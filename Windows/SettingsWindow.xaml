@@ -1,0 +1,125 @@
+<Window x:Class="PipelineBar.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PipelineBar-instellingen" Width="560" SizeToContent="Height" ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen" ThemeMode="System"
+        Icon="pack://application:,,,/PipelineBar.ico">
+
+    <Window.Resources>
+        <Style x:Key="Section" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,18,0,8" />
+        </Style>
+        <Style x:Key="Hint" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Opacity" Value="0.7" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,4,0,0" />
+        </Style>
+        <Style x:Key="Label" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,16,0" />
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24,6,24,20">
+
+            <!-- Verbinding -->
+            <TextBlock Text="Verbinding" Style="{StaticResource Section}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="170" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="8" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Organisatie" Style="{StaticResource Label}" />
+                <StackPanel Grid.Column="1">
+                    <TextBox x:Name="OrganizationBox" LostFocus="Organization_Commit" KeyDown="Organization_KeyDown" />
+                    <TextBlock Text="De naam uit dev.azure.com/…" Style="{StaticResource Hint}" />
+                </StackPanel>
+                <TextBlock Grid.Row="2" Text="Personal Access Token" Style="{StaticResource Label}" />
+                <StackPanel Grid.Row="2" Grid.Column="1">
+                    <PasswordBox x:Name="TokenBox" KeyDown="Token_KeyDown" PasswordChanged="Token_Changed" />
+                    <TextBlock x:Name="TokenHint" Style="{StaticResource Hint}" />
+                </StackPanel>
+            </Grid>
+            <StackPanel Orientation="Horizontal" Margin="170,10,0,0">
+                <Button x:Name="SaveTokenButton" Content="Token opslaan" Click="SaveToken_Click" />
+                <Button x:Name="TestButton" Content="Verbinding testen" Click="Test_Click" Margin="8,0,0,0" />
+            </StackPanel>
+            <TextBlock x:Name="TestResult" Margin="170,8,0,0" TextWrapping="Wrap" Visibility="Collapsed" />
+            <TextBlock Margin="170,8,0,0" Style="{StaticResource Hint}">
+                Het token heeft enkel Build (Read) en Release (Read) nodig en blijft in Windows Referentiebeheer.
+                <Hyperlink x:Name="TokenLink" Click="TokenLink_Click">Token aanmaken in Azure DevOps</Hyperlink>
+            </TextBlock>
+
+            <!-- Pipelines -->
+            <TextBlock Text="Pipelines" Style="{StaticResource Section}" />
+            <CheckBox x:Name="OnlyMineBox" Content="Enkel runs die ik startte" Click="Option_Changed" />
+            <CheckBox x:Name="ReleasesBox" Content="Klassieke release-pipelines tonen" Click="Option_Changed" />
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="170" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="8" />
+                    <RowDefinition />
+                    <RowDefinition Height="8" />
+                    <RowDefinition />
+                    <RowDefinition Height="8" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Projecten" Style="{StaticResource Label}" />
+                <StackPanel Grid.Column="1">
+                    <TextBox x:Name="ProjectsBox" LostFocus="Text_Commit" KeyDown="Text_KeyDown" />
+                    <TextBlock Text="Gescheiden door komma's. Leeg = alle projecten." Style="{StaticResource Hint}" />
+                </StackPanel>
+                <TextBlock Grid.Row="2" Text="Filter op naam" Style="{StaticResource Label}" />
+                <StackPanel Grid.Row="2" Grid.Column="1">
+                    <TextBox x:Name="FilterBox" LostFocus="Text_Commit" KeyDown="Text_KeyDown" />
+                    <TextBlock Text="Reguliere expressie, bv. ^(api|web)" Style="{StaticResource Hint}" />
+                </StackPanel>
+                <TextBlock Grid.Row="4" Text="Runs tonen van" Style="{StaticResource Label}" />
+                <ComboBox x:Name="AgeBox" Grid.Row="4" Grid.Column="1" SelectionChanged="Option_Changed"
+                          SelectedValuePath="Tag">
+                    <ComboBoxItem Content="Vandaag" Tag="0" />
+                    <ComboBoxItem Content="De laatste 7 dagen" Tag="7" />
+                    <ComboBoxItem Content="De laatste 30 dagen" Tag="30" />
+                    <ComboBoxItem Content="De laatste 90 dagen" Tag="90" />
+                    <ComboBoxItem Content="De laatste 365 dagen" Tag="365" />
+                </ComboBox>
+                <TextBlock Grid.Row="6" Text="Vernieuwen" Style="{StaticResource Label}" />
+                <ComboBox x:Name="RefreshBox" Grid.Row="6" Grid.Column="1" SelectionChanged="Option_Changed"
+                          SelectedValuePath="Tag">
+                    <ComboBoxItem Content="Elke minuut" Tag="1" />
+                    <ComboBoxItem Content="Elke 2 minuten" Tag="2" />
+                    <ComboBoxItem Content="Elke 5 minuten" Tag="5" />
+                    <ComboBoxItem Content="Elke 15 minuten" Tag="15" />
+                </ComboBox>
+            </Grid>
+
+            <!-- Meldingen -->
+            <TextBlock Text="Meldingen" Style="{StaticResource Section}" />
+            <CheckBox x:Name="NotifyStartBox" Content="Wanneer een run start" Click="Option_Changed" />
+            <CheckBox x:Name="NotifySuccessBox" Content="Wanneer een run slaagt" Click="Option_Changed" />
+            <TextBlock Text="Mislukt, hersteld en wacht op goedkeuring meld je altijd." Style="{StaticResource Hint}" />
+            <Button Content="Meldingen in Windows-instellingen" Click="NotificationSettings_Click"
+                    HorizontalAlignment="Left" Margin="0,10,0,0" />
+
+            <!-- Algemeen -->
+            <TextBlock Text="Algemeen" Style="{StaticResource Section}" />
+            <CheckBox x:Name="AutostartBox" Content="Openen bij aanmelden" Click="Autostart_Changed" />
+
+            <Button Content="Sluiten" HorizontalAlignment="Right" Margin="0,20,0,0" MinWidth="96"
+                    IsCancel="True" Click="Close_Click" />
+        </StackPanel>
+    </ScrollViewer>
+</Window>
